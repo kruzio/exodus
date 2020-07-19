@@ -61,6 +61,40 @@ archives:
     name_template: '{{ .ProjectName }}_v{{ .Major }}.{{ .Minor }}.{{ .Patch }}_{{ .Os }}_{{ .Arch }}'
     format: binary
 
+dockers:
+  - image_templates:
+      - 'kruzio/exodus:v{{ .Major }}.{{ .Minor }}.{{ .Patch }}'
+      - 'kruzio/exodus:latest'
+    dockerfile: Dockerfile
+    binaries:
+      - exodus
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=repository=https://github.com/kruzio/exodus"
+      - "--label=homepage=https://github.com/kruzio/exodus"
+      - "--label=maintainer=Kruz.io <exodus@kruz.io>"
+    skip_push: false
+  - image_templates:
+      - 'kruzio/exodus:v{{ .Major }}.{{ .Minor }}.{{ .Patch }}-debug'
+      - 'kruzio/exodus:debug'
+    dockerfile: Dockerfile_debug
+    binaries:
+      - exodus
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=repository=https://github.com/kruzio/exodus"
+      - "--label=homepage=https://github.com/kruzio/exodus"
+      - "--label=maintainer=Kruz.io <support@kruz.io>"
+    skip_push: false
+
 release:
   # Repo in which the release will be created.
   # Default is extracted from the origin remote URL.

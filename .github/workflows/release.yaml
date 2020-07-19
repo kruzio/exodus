@@ -24,4 +24,5 @@ jobs:
         run: |
           make get-bins
           make test
+          docker login -u kruzops -p ${{ secrets.DOCKERHUB_KRUZOPS_PASSWORD }}
           make gorelease
