@@ -1,4 +1,4 @@
-package filesend
+package sendfile
 
 import (
 	"bytes"

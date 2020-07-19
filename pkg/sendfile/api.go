@@ -1,4 +1,4 @@
-package filesend
+package sendfile
 
 import (
 	"fmt"
@@ -9,13 +9,13 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/klog"
 
-	"github.com/kruzio/exodus/pkg/filesend/azureblob"
-	"github.com/kruzio/exodus/pkg/filesend/file"
-	"github.com/kruzio/exodus/pkg/filesend/gcs"
-	"github.com/kruzio/exodus/pkg/filesend/s3"
-	"github.com/kruzio/exodus/pkg/filesend/slack"
-	"github.com/kruzio/exodus/pkg/filesend/smtp"
-	"github.com/kruzio/exodus/pkg/filesend/webhook"
+	"github.com/kruzio/exodus/pkg/sendfile/azureblob"
+	"github.com/kruzio/exodus/pkg/sendfile/file"
+	"github.com/kruzio/exodus/pkg/sendfile/gcs"
+	"github.com/kruzio/exodus/pkg/sendfile/s3"
+	"github.com/kruzio/exodus/pkg/sendfile/slack"
+	"github.com/kruzio/exodus/pkg/sendfile/smtp"
+	"github.com/kruzio/exodus/pkg/sendfile/webhook"
 )
 
 type Target interface {

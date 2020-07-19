@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/kruzio/exodus/pkg/filesend"
+	"github.com/kruzio/exodus/pkg/sendfile"
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"k8s.io/apimachinery/pkg/util/errors"
@@ -40,7 +40,7 @@ func (o *SendFileOpts) Validate() error {
 	}
 
 	for _, t := range o.Targets {
-		if err := filesend.ValidateTargetUrl(t); err != nil {
+		if err := sendfile.ValidateTargetUrl(t); err != nil {
 			return err
 		}
 	}
@@ -67,7 +67,7 @@ Supported Targets
 ------------------
 %s
 
-`, filesend.UsageInfo()),
+`, sendfile.UsageInfo()),
 		Hidden: false,
 		RunE: func(c *cobra.Command, args []string) error {
 
@@ -100,7 +100,7 @@ Supported Targets
 				go func(target string, data []byte, errChan chan<- error) {
 					defer wg.Done()
 
-					uploader, err := filesend.NewUploader(target)
+					uploader, err := sendfile.NewUploader(target)
 					if err != nil {
 						klog.Errorf("%v", err)
 						errChan <- err
@@ -112,7 +112,7 @@ Supported Targets
 					_ = uploader.SetDestName(opts.DstFilename)
 
 					if opts.RetryTimeout > 0 && opts.RetryInterval > 0 {
-						err = filesend.UploadWithRetry(uploader, data, opts.RetryInterval, opts.RetryTimeout)
+						err = sendfile.UploadWithRetry(uploader, data, opts.RetryInterval, opts.RetryTimeout)
 					} else {
 						err = uploader.Export(data)
 					}
