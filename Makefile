@@ -76,13 +76,20 @@ build: ##@build Build on local platform
 
 .PHONY: test
 test: ##@test run tests
-	go test github.com/kruzio/exodus/...
+	go test -v github.com/kruzio/exodus/...
+
+.PHONY: coverage
+coverage: ##@test run tests
+	go test -v -race -covermode atomic -coverprofile=coverage.out github.com/kruzio/exodus/...
+	go tool cover -func=coverage.out
+	go tool cover -html=coverage.out -o coverage.html
+
 
 
 #
 #  How to release:
 #
-#  1. Grab GITHUB Token of kruzbuilder from 1password
+#  1. Grab GITHUB Token of kruzbuilder from the password valut
 #  2. export GITHUB_TOKEN=<thetoken>
 #  3. git tag -a v0.4.0 -m "my new version"
 #  4. git push origin v0.4.0

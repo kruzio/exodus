@@ -2,6 +2,7 @@ package gcs
 
 import (
 	"github.com/kruzio/exodus/pkg/cloudblob"
+	"github.com/kruzio/exodus/pkg/usageprinter"
 	"gocloud.dev/blob/gcsblob"
 )
 
@@ -15,5 +16,18 @@ const Scheme = gcsblob.Scheme
 //if you have authenticated via gcloud auth login, it will use those credentials.
 //See Application Default Credentials to learn about authentication alternatives, including using environment variables.
 func (gcs *GCSUploader) UsageInfo() string {
-	return "Upload to GCP Cloud Storage using the following URL scheme: gs://my-bucket. For additional information see https://gocloud.dev/howto/blob/#gcs-ctor"
+	table, buf := usageprinter.NewUsageTable(Scheme)
+
+	data := [][]string{
+		[]string{"Upload to GCP Cloud Storage", "gs://my-bucket\nFor additional information see https://gocloud.dev/howto/blob/#gcs-ctor"},
+	}
+
+	table.AppendBulk(data)
+	table.Render()
+
+	return buf.String()
+}
+
+func (gcs *GCSUploader) Scheme() string {
+	return Scheme
 }

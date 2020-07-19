@@ -11,4 +11,3 @@ curl https://raw.githubusercontent.com/kruzio/exodus/master/download.sh | bash
 ```
 
 ## Command Line Examples
-

@@ -20,8 +20,8 @@ func ExodusCmd() *cobra.Command {
 
 	var genBashCompletionCmd = &cobra.Command{
 		Use:   "bash-completion",
-		Short: "Generate bash completion. source < (advisor bash-completion)",
-		Long:  "Generate bash completion. source < (advisor bash-completion)",
+		Short: "Generate bash completion. source < (exodus bash-completion)",
+		Long:  "Generate bash completion. source < (exodus bash-completion)",
 		Run: func(cmd *cobra.Command, args []string) {
 			out := new(bytes.Buffer)
 			_ = rootCmd.GenBashCompletion(out)
@@ -31,6 +31,7 @@ func ExodusCmd() *cobra.Command {
 
 	cmds := []*cobra.Command{
 		cmd.NewCommandVersion(),
+		cmd.NewCommandSendFile(),
 		genBashCompletionCmd,
 	}
 
