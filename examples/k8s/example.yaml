@@ -1,0 +1,87 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: exodus
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: export-targets
+  namespace: exodus
+type: Opaque
+data:
+  # printf "webhook://dest.io?skip-verify=true&token-bearer=1234&content-type=text" | base64
+  targets: d2ViaG9vazovL2Rlc3QuaW8/c2tpcC12ZXJpZnk9dHJ1ZSZ0b2tlbi1iZWFyZXI9MTIzNCZjb250ZW50LXR5cGU9dGV4dA==
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: example
+  namespace: exodus
+  labels:
+    app.kubernetes.io/name: exodus-example
+    app.kubernetes.io/instance: example
+    app.kubernetes.io/version: "1.0.0"
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      # Pod Security
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000590000
+        runAsGroup: 1000590000
+        fsGroup: 1000590000
+
+      volumes:
+        # Our Send Box
+        - name: sendbox
+          emptyDir: {}
+      containers:
+        - name: exodus
+          image: kruzio/exodus:v0.2.0
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /sendbox
+              name: sendbox
+          args:
+            - "sendfile"
+            - "--watch"
+            - "/sendbox"
+            - "--watch-forever"
+            - "false"
+            # Debugging
+            - "-v"
+            - "7"
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: KRUZIO_EXODUS_SENDFILE_TARGETS
+              valueFrom:
+                secretKeyRef:
+                  name: export-targets
+                  key: targets
+        - name: producer
+          image: busybox:latest
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /sendbox
+              name: sendbox
+          command: ["/bin/sh"]
+          args:
+              - -c
+              - "sleep 3 && echo hello > /sendbox/file-to-send.txt && sleep 3 && ls -la /sendbox/ && exit 0"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+      restartPolicy: Never
