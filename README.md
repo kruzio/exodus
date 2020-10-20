@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![Tweet](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fkruzio%2Fexodus)
 
-<img src="https://raw.githubusercontent.com/kruzio/artwork/main/logo.png" alt="drawing" width="300"/>
+<img src="https://raw.githubusercontent.com/kruzio/artwork/main/logo.png" alt="logo" width="128"/>
 
 # exodus
 - Export file(s) to external targets easily
